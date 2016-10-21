@@ -32,7 +32,6 @@ function init(){
 
     /* Bind events to rectangles */
     for (var i = 0; i < rect.length; i++){
-        console.log("i = " + i);
         rect[i].onMouseDown = (function(i){
             return function(event){
                 var newCircle = new Path.Circle(event.point, 200);
@@ -95,7 +94,8 @@ function onFrame(event){
     for(var i = 0; i < circles.length; i++){
         circles[i].fillColor.hue += 1;
         circles[i].scale(0.98);
-        if (circles[i].bounds.width < 0.01){
+        if (circles[i].bounds.width < 1){
+            circles[i].remove();
             circles.splice(i,1);
         }
     }
@@ -115,12 +115,10 @@ function circleMouseDown(event){
 
 /* If we click on text ----- repeat circle+sound every second */
 function textMouseDown(event){
-    console.log("text mouseDown");
     for (var i = 0; i < rect.length; i++){
         if (rect[i].contains(event.point)) {
             setInterval((function (i, event) {
                 return function () {
-                    console.log("i = " + i);
                     rect[i].onMouseDown(event);
                 }
             })(i, event), 1000);
