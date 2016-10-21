@@ -8,6 +8,32 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.1/howler.js"></script>
     <script type="text/javascript" src="keyData.js"></script>
     <script type="text/paperscript" canvas="myCanvas">
+    /* Create rectangle, used for touch/click input and will work like a giant piano
+
+    rectangles positions on screen
+
+    0  1
+    2  3
+    4  5
+
+
+    */
+    var rect0 = new Path.Rectangle(new Point(0, 0),                                          new Point(view.size.width / 2, view.size.height / 3));
+    rect0.fillColor = '#ff0000';
+    var rect1 = new Path.Rectangle(new Point(view.size.width / 2, 0),                        new Point(view.size.width, view.size.height / 3));
+    rect1.fillColor = '#00ff00';
+    var rect2 = new Path.Rectangle(new Point(0, view.size.height / 3),                       new Point(view.size.width / 2, view.size.height * 2 / 3));
+    rect2.fillColor = '#0000ff';
+    var rect3 = new Path.Rectangle(new Point(view.size.width / 2, view.size.height / 3),     new Point(view.size.width, view.size.height * 2 / 3));
+    rect3.fillColor = '#ff00ff';
+    var rect4 = new Path.Rectangle(new Point(0, view.size.height * 2 / 3),                   new Point(view.size.width / 2, view.size.height));
+    rect4.fillColor = '#ffff00';
+    var rect5 = new Path.Rectangle(new Point(view.size.width / 2, view.size.height * 2 / 3), new Point(view.size.width, view.size.height));
+    rect5.fillColor = '#00ffff';
+
+
+
+
     var circles = [];
 
     function onKeyDown(event){
@@ -35,10 +61,61 @@
          }
     }
 
+   rect0.onMouseDown = function(event){
+        var letter = "a";
+        var newCircle = new Path.Circle(event.point, 200);
+        newCircle.fillColor = keyData[letter].color;
+        keyData[letter].sound.play();
+        circles.push(newCircle);
+   };
+
+   rect1.onMouseDown = function(event){
+        var letter = "b";
+        var newCircle = new Path.Circle(event.point, 200);
+        newCircle.fillColor = keyData[letter].color;
+        keyData[letter].sound.play();
+        circles.push(newCircle);
+   };
+
+    rect2.onMouseDown = function(event){
+        var letter = "c";
+        var newCircle = new Path.Circle(event.point, 200);
+        newCircle.fillColor = keyData[letter].color;
+        keyData[letter].sound.play();
+        circles.push(newCircle);
+   };
+
+    rect3.onMouseDown = function(event){
+        var letter = "d";
+        var newCircle = new Path.Circle(event.point, 200);
+        newCircle.fillColor = keyData[letter].color;
+        keyData[letter].sound.play();
+        circles.push(newCircle);
+   };
+
+    rect4.onMouseDown = function(event){
+        var letter = "e";
+        var newCircle = new Path.Circle(event.point, 200);
+        newCircle.fillColor = keyData[letter].color;
+        keyData[letter].sound.play();
+        circles.push(newCircle);
+   };
+
+    rect5.onMouseDown = function(event){
+        var letter = "f";
+        var newCircle = new Path.Circle(event.point, 200);
+        newCircle.fillColor = keyData[letter].color;
+        keyData[letter].sound.play();
+        circles.push(newCircle);
+   };
+
+
+
+/* PREVIOUS FUNCTION WITH RANDOM COLOURS AND SOUND
     function onMouseDown(event){
         var randomKeyNumber = Math.floor(Math.random() * 26);
         var randomKey = String.fromCharCode(97 + randomKeyNumber);
-        console.log(keyData[randomKey].color);
+        console.log(keyData[randomKey].color);*
         if(keyData[randomKey]){
             var newCircle = new Path.Circle(event.point, 400);
             newCircle.fillColor = keyData[randomKey].color;
@@ -46,6 +123,11 @@
               circles.push(newCircle);
         }
     }
+*/
+
+
+
+
 
     var text = new PointText(new Point(50, 50));
     text.justification = 'center';
