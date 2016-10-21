@@ -63,13 +63,14 @@
          }
     }
 
-   rect0.onMouseDown = function(event){
 
+   rect0.onMouseDown = function(event){
         var letter = "a";
         var newCircle = new Path.Circle(event.point, 200);
         newCircle.fillColor = keyData[letter].color;
         keyData[letter].sound.play();
         keyData[letter].sound.play();
+        newCircle.onMouseDown = circleMouseDown;
         circles.push(newCircle);
    };
 
@@ -78,6 +79,7 @@
         var newCircle = new Path.Circle(event.point, 200);
         newCircle.fillColor = keyData[letter].color;
         keyData[letter].sound.play();
+        newCircle.onMouseDown = circleMouseDown;
         circles.push(newCircle);
    };
 
@@ -86,6 +88,7 @@
         var newCircle = new Path.Circle(event.point, 200);
         newCircle.fillColor = keyData[letter].color;
         keyData[letter].sound.play();
+        newCircle.onMouseDown = circleMouseDown;
         circles.push(newCircle);
    };
 
@@ -94,6 +97,7 @@
         var newCircle = new Path.Circle(event.point, 200);
         newCircle.fillColor = keyData[letter].color;
         keyData[letter].sound.play();
+        newCircle.onMouseDown = circleMouseDown;
         circles.push(newCircle);
    };
 
@@ -102,6 +106,7 @@
         var newCircle = new Path.Circle(event.point, 200);
         newCircle.fillColor = keyData[letter].color;
         keyData[letter].sound.play();
+        newCircle.onMouseDown = circleMouseDown;
         circles.push(newCircle);
    };
 
@@ -110,8 +115,33 @@
         var newCircle = new Path.Circle(event.point, 200);
         newCircle.fillColor = keyData[letter].color;
         keyData[letter].sound.play();
+        newCircle.onMouseDown = circleMouseDown;
         circles.push(newCircle);
    };
+
+    /* IF WE CLICK ON A CIRCLE ------ the rectangles have event handlers, but not the circles created on top of them */
+    function circleMouseDown(event){
+            console.log("start circleMouseDown");
+        if (event.point.y <= view.size.height / 3){
+            if (event.point.x <= view.size.width / 2){ // RECT 0
+                rect0.onMouseDown(event);
+            }else{
+                rect1.onMouseDown(event);
+            }
+        }else if(event.point.y <= view.size.height * 2 / 3){
+            if (event.point.x <= view.size.width / 2){
+                rect2.onMouseDown(event);
+            }else{
+                rect3.onMouseDown(event);
+            }
+        }else{
+            if (event.point.x <= view.size.width / 2){
+                rect4.onMouseDown(event);
+            }else{
+                rect5.onMouseDown(event);
+            }
+        }
+    }
 
 
 
