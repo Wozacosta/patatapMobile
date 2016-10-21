@@ -45,6 +45,8 @@
             var newCircle = new Path.Circle(point, 400);
             newCircle.fillColor = keyData[event.key].color;
             keyData[event.key].sound.play();
+
+
               circles.push(newCircle);
         }
         /*console.log("circles.length = " + circles.length); -- check circles array length */
@@ -62,10 +64,16 @@
     }
 
    rect0.onMouseDown = function(event){
+
         var letter = "a";
         var newCircle = new Path.Circle(event.point, 200);
         newCircle.fillColor = keyData[letter].color;
         keyData[letter].sound.play();
+        if (event.pressure > 0.5){
+        keyData["b"].sound.play();
+        }else{
+        keyData[letter].sound.play();
+        }
         circles.push(newCircle);
    };
 
