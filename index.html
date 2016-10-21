@@ -9,26 +9,19 @@
     <script type="text/javascript" src="keyData.js"></script>
     <script type="text/paperscript" canvas="myCanvas">
     /* Create rectangle, used for touch/click input and will work like a giant piano
-
     rectangles positions on screen
 
     0  1
     2  3
-    4  5
+    4  5      */
 
-
-    */
-    var rect = [];
-    var rectSounds = ["a", "b", "c", "d", "e", "f"];
-    var soundNames = [];
+    var rect = [];        /* Array of Rectangle objects */
+    var rectSounds = ["q", "r", "t", "i", "k", "y"];     /* Change rectangle sound by changing letter */
+    var soundNames = [];   /* Array of TextPoint that displays the sound name in the rectangle */
     var circles = [];
+    var creator;          /* Me :P */
 
      init();
-
-    /* ---- HANDLES RESIZING OF RECTANGLES ---- */
-    view.onResize = function(event){
-         init();
-    }
 
     function init(){
         rect[0] = new Path.Rectangle(new Point(0, 0),                                          new Point(view.size.width / 2, view.size.height / 3));
@@ -44,88 +37,56 @@
         rect[5] = new Path.Rectangle(new Point(view.size.width / 2, view.size.height * 2 / 3), new Point(view.size.width, view.size.height));
         rect[5].fillColor = '#FFDA00';
 
-        rect[0].onMouseDown = function(event){
-        var letter = "a";
-        var newCircle = new Path.Circle(event.point, 200);
-        newCircle.fillColor = keyData[letter].color;
-        keyData[letter].sound.play();
-        keyData[letter].sound.play();
-        newCircle.onMouseDown = circleMouseDown;
-        circles.push(newCircle);
-   };
+        /* Bind events to rectangles */
+        for (var i = 0; i < rect.length; i++){
+            console.log("i = " + i);
+            rect[i].onMouseDown = (function(i){
+                return function(event){
+                var newCircle = new Path.Circle(event.point, 200);
+                newCircle.fillColor = keyData[rectSounds[i]].color;
+                keyData[rectSounds[i]].sound.play();
+                newCircle.onMouseDown = circleMouseDown;
+                circles.push(newCircle);
+              };
+            })(i);
+        }
 
-   rect[1].onMouseDown = function(event){
-        var letter = "b";
-        var newCircle = new Path.Circle(event.point, 200);
-        newCircle.fillColor = keyData[letter].color;
-        keyData[letter].sound.play();
-        newCircle.onMouseDown = circleMouseDown;
-        circles.push(newCircle);
-   };
 
-    rect[2].onMouseDown = function(event){
-        var letter = "c";
-        var newCircle = new Path.Circle(event.point, 200);
-        newCircle.fillColor = keyData[letter].color;
-        keyData[letter].sound.play();
-        newCircle.onMouseDown = circleMouseDown;
-        circles.push(newCircle);
-   };
+        /* Displays sound name in white in the rectangles */
+       for (var i = 0; i < rect.length; i++){
+            var pathSong = keyData[rectSounds[i]].sound._src;
+            var songFile = pathSong.substring(pathSong.indexOf('/') + 1, pathSong.indexOf('.'));
 
-    rect[3].onMouseDown = function(event){
-        var letter = "d";
-        var newCircle = new Path.Circle(event.point, 200);
-        newCircle.fillColor = keyData[letter].color;
-        keyData[letter].sound.play();
-        newCircle.onMouseDown = circleMouseDown;
-        circles.push(newCircle);
-   };
+            soundNames[i] = new PointText({
 
-    rect[4].onMouseDown = function(event){
-        var letter = "e";
-        var newCircle = new Path.Circle(event.point, 200);
-        newCircle.fillColor = keyData[letter].color;
-        keyData[letter].sound.play();
-        newCircle.onMouseDown = circleMouseDown;
-        circles.push(newCircle);
-   };
+                point: rect[i].position,
+                content: songFile,
+                fillColor: "white",
+                fontSize: 20,
+                fontFamily: 'Courier New',
+                shadowColor: new Color(0, 0, 0),
+                shadowBlur: 12,
+                shadowOffset: new Point(3, 3)
+            });
+            soundNames[i].onMouseDown = circleMouseDown; /* Just like circles, we couldn't click on text */
 
-    rect[5].onMouseDown = function(event){
-        var letter = "f";
-        var newCircle = new Path.Circle(event.point, 200);
-        newCircle.fillColor = keyData[letter].color;
-        keyData[letter].sound.play();
-        newCircle.onMouseDown = circleMouseDown;
-        circles.push(newCircle);
-   };
+         }
 
-   for (var i = 0; i < rect.length; i++){
-        var pathSong = keyData[rectSounds[i]].sound._src;
-        var songFile = pathSong.substring(pathSong.indexOf('/') + 1, pathSong.indexOf('.'));
+        creator = new PointText(new Point(60, 14));
+        creator.justification = 'center';
+        creator.fillColor = 'red';
+        creator.content = '@wozacosta';
+    }
 
-        soundNames[i] = new PointText({
 
-            point: rect[i].position,
-            content: songFile,
-            fillColor: "white",
-            fontSize: 20,
-            fontFamily: 'Courier New',
-            shadowColor: new Color(0, 0, 0),
-            shadowBlur: 12,
-            shadowOffset: new Point(3, 3)
-        });
-
-   }
-      var text = new PointText(new Point(60, 14));
-    text.justification = 'center';
-    text.fillColor = 'white';
-    text.content = '@wozacosta';
- }
+    /* ---- HANDLES RESIZING OF RECTANGLES ---- */
+    view.onResize = function(event){
+        init();
+    }
 
 
 
     function onKeyDown(event){
-
         if(keyData[event.key]){
             var maxPoint = new Point(view.size.width, view.size.height);
             var randomPoint = Point.random();
@@ -133,49 +94,30 @@
             var newCircle = new Path.Circle(point, 400);
             newCircle.fillColor = keyData[event.key].color;
             keyData[event.key].sound.play();
-
-
-              circles.push(newCircle);
+            circles.push(newCircle);
         }
-        /*console.log("circles.length = " + circles.length); -- check circles array length */
     }
-
 
     function onFrame(event){
         for(var i = 0; i < circles.length; i++){
             circles[i].fillColor.hue += 1;
             circles[i].scale(0.98);
             if (circles[i].bounds.width < 0.01){
-                   circles.splice(i,1);
+                circles.splice(i,1);
             }
          }
+         creator.fillColor.hue +=1;
     }
-
-
 
 
     /* IF WE CLICK ON A CIRCLE ------ the rectangles have event handlers, but not the circles created on top of them */
     function circleMouseDown(event){
             console.log("start circleMouseDown");
-        if (event.point.y <= view.size.height / 3){
-            if (event.point.x <= view.size.width / 2){ // RECT 0
-                rect[0].onMouseDown(event);
-            }else{
-                rect[1].onMouseDown(event);
-            }
-        }else if(event.point.y <= view.size.height * 2 / 3){
-            if (event.point.x <= view.size.width / 2){
-                rect[2].onMouseDown(event);
-            }else{
-                rect[3].onMouseDown(event);
-            }
-        }else{
-            if (event.point.x <= view.size.width / 2){
-                rect[4].onMouseDown(event);
-            }else{
-                rect[5].onMouseDown(event);
-            }
-        }
+           for (var i = 0; i < rect.length; i++){
+                if(rect[i].contains(event.point)){
+                    rect[i].onMouseDown(event);
+                }
+           }
     }
 
 
