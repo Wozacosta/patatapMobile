@@ -11,6 +11,7 @@
     var circles = [];
 
     function onKeyDown(event){
+
         if(keyData[event.key]){
             var maxPoint = new Point(view.size.width, view.size.height);
             var randomPoint = Point.random();
@@ -33,6 +34,20 @@
             }
          }
     }
+
+    function onMouseDown(event){
+        var randomKeyNumber = Math.floor(Math.random() * 26);
+        var randomKey = String.fromCharCode(97 + randomKeyNumber);
+        console.log(keyData[randomKey].color);
+        if(keyData[randomKey]){
+            var newCircle = new Path.Circle(event.point, 400);
+            newCircle.fillColor = keyData[randomKey].color;
+            keyData[randomKey].sound.play();
+              circles.push(newCircle);
+        }
+    }
+
+
 
 
 
