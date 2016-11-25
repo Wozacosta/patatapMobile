@@ -2,6 +2,7 @@
 
 https://wozacosta.github.io/patatapMobile
 
-Clone of patatap, using paperJs and howlerJs
+Based on patatap.com
+Using paperJs for the visuals and howlerJs for the audio
 
-thanks to https://www.udemy.com/the-web-developer-bootcamp/
+
